@@ -71,18 +71,22 @@ export default {
         },
         {
           id: 2,
-          text: '张某某 云南省昆明市五华区东风西路234号 13888999001'
+          text: '四川成都市金牛区东风西路182号核工业商务楼602 林某某 13888881234'
         },
         {
           id: 3,
-          text: '18087238726 丁某某 河南省驻马店市新蔡县街道办事处'
+          text: '张某某 云南省昆明市五华区东风西路234号 13888999001'
         },
         {
           id: 4,
+          text: '18087238726 丁某某 河南省驻马店市新蔡县街道办事处'
+        },
+        {
+          id: 5,
           text: '河南省驻马店市新蔡县街道办事处 18087238726 丁某某 '
         }
       ],
-      allProvince: '北京, 天津, 河北省, 山西省, 内蒙古自治区, 辽宁省, 吉林省, 黑龙江省, 上海, 江苏省, 浙江省, 安徽省, 福建省, 江西省, 山东省, 河南省, 湖北省, 湖南省, 广东省, 广西壮族自治区, 海南省, 重庆, 四川省, 贵州省, 云南省, 西藏自治区, 陕西省, 甘肃省, 青海省, 宁夏回族自治区, 新疆维吾尔自治区, 台湾, 香港特别行政区, 澳门特别行政区, 钓鱼岛',
+      allProvince: ' 北京, 天津, 河北省, 山西省, 内蒙古自治区, 辽宁省, 吉林省, 黑龙江省, 上海, 江苏省, 浙江省, 安徽省, 福建省, 江西省, 山东省, 河南省, 湖北省, 湖南省, 广东省, 广西壮族自治区, 海南省, 重庆, 四川省, 贵州省, 云南省, 西藏自治区, 陕西省, 甘肃省, 青海省, 宁夏回族自治区, 新疆维吾尔自治区, 台湾, 香港特别行政区, 澳门特别行政区, 钓鱼岛',
       select: { province: '', city: '', area: '' },
       placeholders: {
         province: '------- 省 --------',
@@ -92,9 +96,7 @@ export default {
     }
   },
   created: function(){
-    let s = '云南省'
-    console.log(s.replace(/(^\s*)|(\s*$)/g, "").replace(/\s+/g," ").split(" "));
-    // console.log(this.allProvince.match(/张某某 云南省/));
+
   },
   methods: {
     onSubmit() {
@@ -114,6 +116,16 @@ export default {
     },
     onTextInput(v){
       let that = this
+      let matched_str = (v + that.allProvince).replace(/(.+)(.+)\1/, '$1\n').split('\n')[0]
+      let correct_str = (v + that.allProvince).replace(/(.+)(.+)\1/, '$1\n').split('\n').join('').split(',')[0]
+      let is_find = that.allProvince.split(',').findIndex(
+              (value) => {
+                return value.replace(/\s+/g,"") === correct_str
+              }
+      )
+      if(is_find != -1){
+        v = v.replace(matched_str,correct_str)
+      }
       let reg = /.+?(省|市|自治区|自治州|县|区)/g;
       let phone = v.match(/[0-9]\d{10,10}/g)
       if(phone){
